@@ -4,13 +4,15 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { initializeApp, getApps, cert } = require("firebase-admin/app");
 const { getAuth } = require("firebase-admin/auth");
-const serviceAccount = require("../serviceAccountKey.json");
+const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT
+  ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
+  : null;
 const User = require("../models/User");
 
 const router = express.Router();
 
-// Initialize Firebase Admin once
-if (getApps().length === 0) {
+// Initialize Firebase 
+if (getApps().length === 0 && serviceAccount) {
   initializeApp({
     credential: cert(serviceAccount),
   });
@@ -119,6 +121,11 @@ router.post("/login", async (req, res) => {
 // GOOGLE/FIREBASE LOGIN
 router.post("/google", async (req, res) => {
   try {
+      if (!getApps().length) {
+    return res.status(503).json({
+      message: "Google login is not configured on the server.",
+    });
+  }
     const { idToken } = req.body;
 
     if (!idToken) {
