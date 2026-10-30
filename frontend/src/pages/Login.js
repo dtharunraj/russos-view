@@ -11,7 +11,7 @@ import {
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../firebase";
 
-const API_URL = "http://localhost:5000/api/auth";
+const API_URL = "https://russos-view-api.onrender.com/api/auth";
 
 export default function Login() {
   const navigate = useNavigate();
