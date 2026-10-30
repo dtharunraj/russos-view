@@ -39,7 +39,7 @@ export default function Signup() {
 
         try {
             const response = await axios.post(
-                "http://localhost:5000/api/auth/signup",
+                 "https://russos-view-api.onrender.com/api/auth/signup",
                 {
                     name: form.name.trim(),
                     email: form.email.trim(),
